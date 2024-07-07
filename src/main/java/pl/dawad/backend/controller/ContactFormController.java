@@ -1,11 +1,12 @@
 package pl.dawad.backend.controller;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.dawad.backend.model.ContactForm;
 import pl.dawad.backend.service.ContactFormService;
 
 @RestController
-@RequestMapping("/api/contact-form")
+@RequestMapping("/public/contact-form")
 public class ContactFormController {
     private final ContactFormService contactFormService;
 
@@ -17,6 +18,10 @@ public class ContactFormController {
     public ContactForm submitContactForm(@RequestBody ContactForm contactForm) {
         contactFormService.processContactForm(contactForm);
         return contactForm;
+    }
+    @GetMapping
+    public String showTestCommunicat(){
+        return "No data";
     }
 
     @GetMapping("/{id}")

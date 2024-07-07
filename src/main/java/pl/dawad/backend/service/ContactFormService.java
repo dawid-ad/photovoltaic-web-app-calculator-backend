@@ -3,7 +3,6 @@ package pl.dawad.backend.service;
 import org.springframework.stereotype.Service;
 import pl.dawad.backend.exception.ResourceNotFoundException;
 import pl.dawad.backend.model.ContactForm;
-import pl.dawad.backend.model.PhotovoltaicItem;
 import pl.dawad.backend.repository.ContactFormRepository;
 
 @Service
@@ -22,10 +21,6 @@ public class ContactFormService {
         contactFormRepository.save(contactForm);
         emailService.sendEmail(contactForm);
         return contactForm;
-    }
-
-    private double calculateFinalPrice(ContactForm contactForm, PhotovoltaicItem photovoltaicItem) {
-        return 0.0;
     }
 
     public ContactForm getContactFormById(Long id) {

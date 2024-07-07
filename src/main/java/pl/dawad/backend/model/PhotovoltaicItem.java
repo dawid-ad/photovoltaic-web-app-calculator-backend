@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -16,12 +18,13 @@ public class PhotovoltaicItem {
     private Long id;
     private String inverter;
     private int panelsQuantity;
-    private double panelsPower;
-    private double inverterPower;
-    private double pvPower;
-    private double corePriceBallastFlatRoof;
-    private double corePriceInvasiveFlatRoof;
-    private double corePriceCeramicTileSlantRoof;
-    private double corePriceSteelTileSlantRoof;
-    private double corePriceGround;
+    private BigDecimal panelsPower;
+    private BigDecimal inverterPower;
+    private BigDecimal pvPower;
+    private BigDecimal corePriceBallastFlatRoof;
+    private BigDecimal corePriceInvasiveFlatRoof;
+    private BigDecimal corePriceCeramicTileSlantRoof;
+    private BigDecimal corePriceSteelTileSlantRoof;
+    private BigDecimal corePriceSteelSlantRoof;
+    private BigDecimal corePriceGround;
 }

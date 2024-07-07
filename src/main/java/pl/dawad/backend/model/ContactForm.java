@@ -4,8 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,22 +20,24 @@ public class ContactForm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // user form data
+    // --- user form data ---
     private String name;
     private String email;
-    private String message;
+    private String phone;
     private String userType;
     private String roofType;
     private String roofConstruction;
-    private double expectedPvPower;
-    private double energyConsumptionPerYear;
+    private String message;
+    private BigDecimal expectedPvPower;
+    private BigDecimal energyConsumptionPerYear;
+    private LocalDate calculationDate;
 
-    // calculation data
-    private double proposedPvPower;
+    // --- calculation data ---
+    private BigDecimal proposedPvPower;
     private String mountType;
     private String inverter;
-    private double priceFrom;
-    private double priceTo;
-    private double investmentReturnInYears;
+    private BigDecimal priceFrom;
+    private BigDecimal priceTo;
+    private BigDecimal investmentReturnInYears;
 }
 
