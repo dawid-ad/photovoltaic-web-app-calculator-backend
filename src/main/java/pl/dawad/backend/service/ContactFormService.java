@@ -8,19 +8,13 @@ import pl.dawad.backend.repository.ContactFormRepository;
 @Service
 public class ContactFormService {
     private final ContactFormRepository contactFormRepository;
-    private final PhotovoltaicItemService photovoltaicItemService;
-    private final EmailService emailService;
 
-    public ContactFormService(ContactFormRepository contactFormRepository, PhotovoltaicItemService photovoltaicItemService, EmailService emailService) {
+    public ContactFormService(ContactFormRepository contactFormRepository) {
         this.contactFormRepository = contactFormRepository;
-        this.photovoltaicItemService = photovoltaicItemService;
-        this.emailService = emailService;
     }
 
-    public ContactForm processContactForm(ContactForm contactForm) {
-        contactFormRepository.save(contactForm);
-        emailService.sendEmail(contactForm);
-        return contactForm;
+    public ContactForm saveContactFormInDb(ContactForm contactForm) {
+        return contactFormRepository.save(contactForm);
     }
 
     public ContactForm getContactFormById(Long id) {
