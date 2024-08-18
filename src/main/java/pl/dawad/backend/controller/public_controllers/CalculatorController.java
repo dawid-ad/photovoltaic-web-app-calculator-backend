@@ -13,7 +13,7 @@ public class CalculatorController {
     public CalculatorController(CalculatorService calculatorService) {
         this.calculatorService = calculatorService;
     }
-    @GetMapping("/calculate")
+    @PostMapping("/calculate")
     public ResponseEntity<ContactForm> processCalculation(@RequestBody ContactForm contactForm) {
         ContactForm preprocessedContactForm = calculatorService.processCalculation(contactForm);
         return ResponseEntity.ok(preprocessedContactForm);
