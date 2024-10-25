@@ -1,20 +1,24 @@
-package pl.dawad.backend.controller.private_controllers;
+package pl.dawad.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pl.dawad.backend.model.PhotovoltaicItem;
+import pl.dawad.backend.model.entity.PhotovoltaicItem;
 import pl.dawad.backend.model.PhotovoltaicItemImportParams;
 import pl.dawad.backend.service.PhotovoltaicItemUpdateService;
-import pl.dawad.backend.service.PhotovoltaicItemService;
+import pl.dawad.backend.service.database.PhotovoltaicItemService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/photovoltaic-items")
+@Validated
+@PreAuthorize("hasAuthority('ROLE_API_KEY')")
 public class PhotovoltaicItemUpdateController {
     private final PhotovoltaicItemUpdateService photovoltaicItemUpdateService;
     private final PhotovoltaicItemService photovoltaicItemService;

@@ -1,8 +1,8 @@
-package pl.dawad.backend.service;
+package pl.dawad.backend.service.database;
 
 import org.springframework.stereotype.Service;
 import pl.dawad.backend.exception.ResourceNotFoundException;
-import pl.dawad.backend.model.PhotovoltaicItem;
+import pl.dawad.backend.model.entity.PhotovoltaicItem;
 import pl.dawad.backend.repository.PhotovoltaicItemRepository;
 
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class PhotovoltaicItemService {
-    private static final String NO_VALUES_ERROR_MESSAGE = "No PvPower values found. Make sure photovoltaicItems table are not empty.";
+    private static final String NO_VALUES_ERROR_MESSAGE = "No PvPower values found. Make sure photovoltaicItems table is not empty.";
     private final PhotovoltaicItemRepository photovoltaicItemRepository;
 
     public PhotovoltaicItemService(PhotovoltaicItemRepository photovoltaicItemRepository) {

@@ -2,6 +2,7 @@ package pl.dawad.backend.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.dawad.backend.model.entity.ContactForm;
 
 @Getter
 @Setter

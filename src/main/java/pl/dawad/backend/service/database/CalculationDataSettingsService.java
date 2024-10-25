@@ -1,8 +1,8 @@
-package pl.dawad.backend.service;
+package pl.dawad.backend.service.database;
 
 import org.springframework.stereotype.Service;
 import pl.dawad.backend.exception.ResourceNotFoundException;
-import pl.dawad.backend.model.CalculationDataSettings;
+import pl.dawad.backend.model.entity.CalculationDataSettings;
 import pl.dawad.backend.repository.CalculationDataSettingsRepository;
 
 import java.util.Optional;
@@ -18,13 +18,12 @@ public class CalculationDataSettingsService {
     public CalculationDataSettings getSettings() {
         Optional<CalculationDataSettings> settings = calculationDataSettingsRepository.findById(1L);
         if (settings.isEmpty()) {
-            throw new ResourceNotFoundException("Calculation Data Settings must be provided.");
+            throw new ResourceNotFoundException("Calculation Data Settings are not provided yet.");
         }
         return settings.get();
     }
 
     public void updateSettings(CalculationDataSettings settings) {
-        settings.setId(1L);
         calculationDataSettingsRepository.save(settings);
     }
 }

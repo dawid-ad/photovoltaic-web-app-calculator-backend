@@ -5,7 +5,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import pl.dawad.backend.model.ContactForm;
+import pl.dawad.backend.model.entity.ContactForm;
 
 @Service
 public class EmailService {

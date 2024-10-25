@@ -3,7 +3,7 @@ package pl.dawad.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import pl.dawad.backend.model.PhotovoltaicItem;
+import pl.dawad.backend.model.entity.PhotovoltaicItem;
 
 import java.math.BigDecimal;
 import java.util.List;
