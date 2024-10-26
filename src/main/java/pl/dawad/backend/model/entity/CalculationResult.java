@@ -30,8 +30,9 @@ public class CalculationResult {
     private double vatTax;
     private BigDecimal pricePerKw;
     private BigDecimal energyPricePerKwh;
-    private boolean isProjoyIncluded;
-    private boolean isGrantPossible;
+    private boolean projoyIncluded;
+    private boolean grantPossible;
+    private boolean energyStorageAvailable;
 
     @Override
     public String toString() {
@@ -49,7 +50,9 @@ public class CalculationResult {
                 ", vatTax=" + vatTax +
                 ", pricePerKw=" + pricePerKw +
                 ", energyPricePerKwh=" + energyPricePerKwh +
-                ", isProjoyIncluded=" + isProjoyIncluded +
+                ", projoyIncluded=" + projoyIncluded +
+                ", grantPossible=" + grantPossible +
+                ", energyStorageAvailable=" + energyStorageAvailable +
                 '}';
     }
 }

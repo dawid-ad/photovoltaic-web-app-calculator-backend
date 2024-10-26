@@ -9,10 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import pl.dawad.backend.enums.CustomerType;
-import pl.dawad.backend.enums.InstallationType;
-import pl.dawad.backend.enums.RoofSurface;
-import pl.dawad.backend.enums.RoofType;
+import pl.dawad.backend.enums.*;
 
 import java.math.BigDecimal;
 
@@ -41,9 +38,8 @@ public class CalculationFormData {
 
     private boolean projoy;
     private boolean fireButton;
-    private int powerOptimizers;
+    private PowerOptimizersType powerOptimizersType;
     private Long energyStorageModelId;
-    private String energyStorageModelName;
     private boolean grant;
 
     @AssertTrue(message = "Either Expected PV Power or Energy Consumption Per Year must be provided and greater than zero")
@@ -57,9 +53,9 @@ public class CalculationFormData {
         return installationType == InstallationType.GROUND || roofType != null;
     }
 
-    @AssertTrue(message = "Roof surface must be provided if roof type is not 'SLANT_ROOF'")
+    @AssertTrue(message = "Roof surface must be provided if roof type is 'SLANT_ROOF'")
     public boolean isRoofSurfaceValid() {
-        return roofType == RoofType.SLANT_ROOF || roofSurface != null;
+        return roofType != RoofType.SLANT_ROOF || (roofSurface != null && !roofSurface.toString().isBlank());
     }
 
     @Override
@@ -75,9 +71,8 @@ public class CalculationFormData {
                 ", energyConsumptionPerYear=" + energyConsumptionPerYear +
                 ", projoy=" + projoy +
                 ", fireButton=" + fireButton +
-                ", powerOptimizers=" + powerOptimizers +
+                ", powerOptimizersType=" + powerOptimizersType +
                 ", energyStorageModelId=" + energyStorageModelId +
-                ", energyStorageModelName='" + energyStorageModelName + '\'' +
                 ", grant=" + grant +
                 '}';
     }

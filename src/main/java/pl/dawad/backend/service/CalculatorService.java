@@ -66,6 +66,7 @@ public class CalculatorService {
         calculationResult.setEnergyPricePerKwh(settings.getMarketEnergyPricePerKwh());
         calculationResult.setProjoyIncluded((pvItem.getCorePriceProjoy().compareTo(BigDecimal.ZERO)) <= 0);
         calculationResult.setGrantPossible(isGrantPossible(pvItem,settings,formData));
+        calculationResult.setEnergyStorageAvailable(pvItem.isEnergyStorageAvailable());
         return calculationResult;
     }
 
@@ -78,7 +79,7 @@ public class CalculatorService {
                                                            PhotovoltaicItem pvItem,
                                                            CalculationFormData formData,
                                                            BigDecimal corePrice) {
-        int powerOptimizers = formData.getPowerOptimizers();
+        PowerOptimizersType powerOptimizersType = formData.getPowerOptimizersType();
 
         if (formData.isProjoy()) {
             corePrice = corePrice.add(pvItem.getCorePriceProjoy());
@@ -87,7 +88,12 @@ public class CalculatorService {
             corePrice = corePrice.add(pvItem.getCorePriceFireButton());
         }
 
-        if (powerOptimizers > 0) {
+        if (powerOptimizersType != null) {
+            int powerOptimizers = switch (powerOptimizersType) {
+                case ALL_MODULES -> pvItem.getPanelsQuantity();
+                case HALF_MODULES -> Math.floorDiv(pvItem.getPanelsQuantity(), 2);
+            };
+
             corePrice = corePrice.add(
                     settings.getPowerOptimizerCorePrice().multiply(
                             BigDecimal.valueOf(powerOptimizers)));
