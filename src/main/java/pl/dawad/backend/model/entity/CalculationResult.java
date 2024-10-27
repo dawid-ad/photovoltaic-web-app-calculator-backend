@@ -24,6 +24,7 @@ public class CalculationResult {
     private String inverterModel;
     private String mountTypeForView;
     private BigDecimal price;
+    private BigDecimal priceWithoutGrant;
     private String moduleModel;
     private int modulePower;
     private int panelsQuantity;
@@ -44,6 +45,7 @@ public class CalculationResult {
                 ", inverterModel='" + inverterModel + '\'' +
                 ", mountTypeForView='" + mountTypeForView + '\'' +
                 ", price=" + price +
+                ", priceWithoutGrant=" + priceWithoutGrant +
                 ", moduleModel='" + moduleModel + '\'' +
                 ", modulePower=" + modulePower +
                 ", panelsQuantity=" + panelsQuantity +

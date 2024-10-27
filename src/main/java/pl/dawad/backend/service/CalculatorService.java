@@ -33,23 +33,29 @@ public class CalculatorService {
         CalculationDataSettings calculationDataSettings = calculationDataSettingsService.getSettings();
 
         PhotovoltaicItem photovoltaicItem = photovoltaicItemService.getClosestPhotovoltaicItemByPower(determinePvPowerToFind(calculationFormData));
-        BigDecimal corePrice = calculateCorePrice(photovoltaicItem, calculationFormData, calculationDataSettings);
+        BigDecimal corePrice = calculateCorePrice(photovoltaicItem, calculationFormData, calculationDataSettings,true);
+        BigDecimal corePriceWithoutGrant = calculateCorePrice(photovoltaicItem, calculationFormData, calculationDataSettings,false);
 
-        return createCalculationResult(calculationFormData, photovoltaicItem, corePrice, calculationDataSettings);
+        return createCalculationResult(calculationFormData, photovoltaicItem, corePrice, corePriceWithoutGrant, calculationDataSettings);
     }
 
-    private BigDecimal calculateCorePrice(PhotovoltaicItem pvItem, CalculationFormData formData, CalculationDataSettings settings) {
+    private BigDecimal calculateCorePrice(PhotovoltaicItem pvItem,
+                                          CalculationFormData formData,
+                                          CalculationDataSettings settings,
+                                          boolean includeGrant) {
         BigDecimal basePrice = determinePvItemCorePrice(pvItem, formData.getInstallationType(), formData.getRoofType(), formData.getRoofSurface());
-        return calculatePriceWithAdditionalOptions(settings, pvItem, formData, basePrice);
+        return calculatePriceWithAdditionalOptions(settings, pvItem, formData, basePrice, includeGrant);
     }
 
     private CalculationResult createCalculationResult(CalculationFormData formData,
                                                       PhotovoltaicItem pvItem,
                                                       BigDecimal corePrice,
+                                                      BigDecimal corePriceWithoutGrant,
                                                       CalculationDataSettings settings) {
         BigDecimal grossMargin = settings.getGrossMargin();
         double vatTax = determineVatTax(formData.getCustomerType());
         BigDecimal resultPrice = applyGrossMarginAndVat(grossMargin, corePrice, vatTax);
+        BigDecimal resultPriceWithoutGrant = applyGrossMarginAndVat(grossMargin, corePriceWithoutGrant, vatTax);
 
         CalculationResult calculationResult = new CalculationResult();
         calculationResult.setCalculationDate(LocalDateTime.now(ZoneId.of("Europe/Warsaw")));
@@ -58,6 +64,7 @@ public class CalculatorService {
         calculationResult.setInverterModel(pvItem.getInverterModel());
         calculationResult.setMountTypeForView(determineMountType(formData.getInstallationType(), formData.getRoofType()).getDisplayedName());
         calculationResult.setPrice(resultPrice);
+        calculationResult.setPriceWithoutGrant(resultPriceWithoutGrant);
         calculationResult.setModuleModel(pvItem.getModuleModel());
         calculationResult.setModulePower(pvItem.getModulePower());
         calculationResult.setPanelsQuantity(pvItem.getPanelsQuantity());
@@ -78,7 +85,8 @@ public class CalculatorService {
     private BigDecimal calculatePriceWithAdditionalOptions(CalculationDataSettings settings,
                                                            PhotovoltaicItem pvItem,
                                                            CalculationFormData formData,
-                                                           BigDecimal corePrice) {
+                                                           BigDecimal corePrice,
+                                                           boolean includeGrant) {
         PowerOptimizersType powerOptimizersType = formData.getPowerOptimizersType();
 
         if (formData.isProjoy()) {
@@ -105,7 +113,8 @@ public class CalculatorService {
             Long energyStorageModel = formData.getEnergyStorageModelId();
             EnergyStorage energyStorage = energyStorageService.getEnergyStorageById(energyStorageModel);
             corePrice = corePrice.add(energyStorage.getCorePrice());
-            if (formData.isGrant()
+            if (includeGrant
+                    && formData.isGrant()
                     && settings.isGrantAvailable()
                     && isGrantPossible(pvItem,settings,formData)) {
                 corePrice = applyGrantToPrice(settings, corePrice);
@@ -139,7 +148,8 @@ public class CalculatorService {
     }
 
     private BigDecimal calculateEstimatedOneYearProduction(BigDecimal marketEnergyPricePerKwh, BigDecimal proposedPvPower) {
-        return proposedPvPower.multiply(BigDecimal.valueOf(1000)).multiply(marketEnergyPricePerKwh);
+        BigDecimal production = proposedPvPower.multiply(BigDecimal.valueOf(1000)).multiply(marketEnergyPricePerKwh);
+        return production.divide(BigDecimal.valueOf(50), 0, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(50));
     }
 
 
