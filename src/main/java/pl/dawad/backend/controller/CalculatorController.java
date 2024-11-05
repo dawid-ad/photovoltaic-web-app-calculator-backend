@@ -19,7 +19,7 @@ public class CalculatorController {
     }
     @PostMapping("")
     public ResponseEntity<CalculationResult> processCalculation(@Valid @RequestBody CalculationFormData calculationFormData) {
-        CalculationResult preprocessedContactForm = calculatorService.processCalculation(calculationFormData);
-        return ResponseEntity.ok(preprocessedContactForm);
+        CalculationResult preprocessedCalculationForm = calculatorService.processCalculation(calculationFormData);
+        return ResponseEntity.ok(preprocessedCalculationForm);
     }
 }

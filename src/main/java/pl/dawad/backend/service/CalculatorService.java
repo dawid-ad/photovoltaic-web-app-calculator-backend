@@ -114,7 +114,7 @@ public class CalculatorService {
             EnergyStorage energyStorage = energyStorageService.getEnergyStorageById(energyStorageModel);
             corePrice = corePrice.add(energyStorage.getCorePrice());
             if (includeGrant
-                    && formData.isGrant()
+                    && formData.isHasGrant()
                     && settings.isGrantAvailable()
                     && isGrantPossible(pvItem,settings,formData)) {
                 corePrice = applyGrantToPrice(settings, corePrice);
@@ -191,7 +191,7 @@ public class CalculatorService {
             return expectedPvPower;
         }
         return calculationFormData.getEnergyConsumptionPerYear()
-                .multiply(BigDecimal.valueOf(1.3))
+                .multiply(BigDecimal.valueOf(1.2))
                 .divide(BigDecimal.valueOf(1000), calculationScale, roundingMode);
     }
 }

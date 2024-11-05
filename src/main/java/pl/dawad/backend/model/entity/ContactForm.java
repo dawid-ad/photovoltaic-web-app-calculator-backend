@@ -35,15 +35,11 @@ public class ContactForm {
     @NotNull(message = "Contact date is required")
     private LocalDateTime contactDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "calculation_form_data_id")
     @NotNull(message = "CalculationFormDataId is required")
-    private CalculationFormData calculationFormData;
+    private Long calculationFormDataId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "calculation_result_id")
     @NotNull(message = "CalculationResultId is required")
-    private CalculationResult calculationResult;
+    private Long calculationResultId;
 
     @Override
     public String toString() {
@@ -54,8 +50,8 @@ public class ContactForm {
                 ", phone='" + phone + '\'' +
                 ", message='" + message + '\'' +
                 ", contactDate=" + contactDate +
-                ", calculationFormData=" + calculationFormData +
-                ", calculationResult=" + calculationResult +
+                ", calculationFormDataId=" + calculationFormDataId +
+                ", calculationResultId=" + calculationResultId +
                 '}';
     }
 }

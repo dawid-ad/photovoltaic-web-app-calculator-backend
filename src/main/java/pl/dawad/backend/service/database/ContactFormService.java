@@ -1,7 +1,9 @@
 package pl.dawad.backend.service.database;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import pl.dawad.backend.exception.ResourceNotFoundException;
+import pl.dawad.backend.model.dto.ContactFormRequestDto;
 import pl.dawad.backend.model.entity.CalculationFormData;
 import pl.dawad.backend.model.entity.CalculationResult;
 import pl.dawad.backend.model.entity.ContactForm;
@@ -21,7 +23,12 @@ public class ContactFormService {
         this.calculationResultService = calculationResultService;
     }
 
-    public ContactForm saveContactForm(ContactForm contactForm) {
+    public ContactForm saveContactForm(@Valid ContactFormRequestDto contactFormRequestDto) {
+        ContactForm contactForm = contactFormRequestDto.getContactForm();
+        CalculationFormData savedCalculationFormData = calculationFormDataService.saveCalculationFormData(contactFormRequestDto.getCalculationFormData());
+        CalculationResult savedCalculationResult = calculationResultService.saveCalculationResult(contactFormRequestDto.getCalculationResult());
+        contactForm.setCalculationFormDataId(savedCalculationFormData.getId());
+        contactForm.setCalculationResultId(savedCalculationResult.getId());
         return contactFormRepository.save(contactForm);
     }
 
@@ -34,16 +41,19 @@ public class ContactFormService {
         contactFormRepository.deleteById(id);
     }
 
-    public ContactForm saveContactFormWithCalculationData(ContactForm contactForm, Long calculationFormDataId, Long calculationResultId) {
-        CalculationFormData calculationFormData = calculationFormDataService.getCalculationFormDataById(calculationFormDataId)
-                .orElseThrow(() -> new ResourceNotFoundException("CalculationFormData not found"));
 
-        CalculationResult calculationResult = calculationResultService.getCalculationResultById(calculationResultId)
-                .orElseThrow(() -> new ResourceNotFoundException("CalculationResult not found"));
 
-        contactForm.setCalculationFormData(calculationFormData);
-        contactForm.setCalculationResult(calculationResult);
+//    public ContactForm saveContactFormWithCalculationData(ContactForm contactForm, Long calculationFormDataId, Long calculationResultId) {
+//        CalculationFormData calculationFormData = calculationFormDataService.getCalculationFormDataById(calculationFormDataId)
+//                .orElseThrow(() -> new ResourceNotFoundException("CalculationFormData not found"));
+//
+//        CalculationResult calculationResult = calculationResultService.getCalculationResultById(calculationResultId)
+//                .orElseThrow(() -> new ResourceNotFoundException("CalculationResult not found"));
+//
+//        contactForm.setCalculationFormData(calculationFormData);
+//        contactForm.setCalculationResult(calculationResult);
+//
+//        return saveContactForm(contactForm);
+//    }
 
-        return saveContactForm(contactForm);
-    }
 }

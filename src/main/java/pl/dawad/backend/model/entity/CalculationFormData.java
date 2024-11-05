@@ -40,7 +40,7 @@ public class CalculationFormData {
     private boolean fireButton;
     private PowerOptimizersType powerOptimizersType;
     private Long energyStorageModelId;
-    private boolean grant;
+    private boolean hasGrant;
 
     @AssertTrue(message = "Either Expected PV Power or Energy Consumption Per Year must be provided and greater than zero")
     public boolean isAtLeastOneFieldValid() {
@@ -73,7 +73,7 @@ public class CalculationFormData {
                 ", fireButton=" + fireButton +
                 ", powerOptimizersType=" + powerOptimizersType +
                 ", energyStorageModelId=" + energyStorageModelId +
-                ", grant=" + grant +
+                ", hasGrant=" + hasGrant +
                 '}';
     }
 }
