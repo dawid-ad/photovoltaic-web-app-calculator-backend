@@ -1,5 +1,7 @@
 package pl.dawad.backend.service.database;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import pl.dawad.backend.exception.ResourceNotFoundException;
 import pl.dawad.backend.model.dto.EnergyStorageModelDto;
@@ -25,6 +27,12 @@ public class EnergyStorageService {
         return energyStorageList.stream()
                 .map(this::saveEnergyStorage)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<EnergyStorage> replaceEnergyStorageList(List<EnergyStorage> newEnergyStorageList) {
+        energyStorageRepository.deleteAll();
+        return energyStorageRepository.saveAll(newEnergyStorageList);
     }
 
     public EnergyStorage getEnergyStorageById(Long id) {

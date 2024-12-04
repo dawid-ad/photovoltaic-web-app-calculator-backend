@@ -30,10 +30,10 @@ public class EnergyStorageController {
      */
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_API_KEY')")
-    public ResponseEntity<List<EnergyStorage>> createEnergyStorage(
+    public ResponseEntity<List<EnergyStorage>> updateEnergyStorage(
             @RequestBody @Valid List<EnergyStorage> energyStorageList) {
-        List<EnergyStorage> savedEnergyStorageList = energyStorageService.saveEnergyStorageList(energyStorageList);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedEnergyStorageList);
+        List<EnergyStorage> updatedEnergyStorageList = energyStorageService.replaceEnergyStorageList(energyStorageList);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedEnergyStorageList);
     }
 
     /**
@@ -72,8 +72,7 @@ public class EnergyStorageController {
     @PreAuthorize("hasAuthority('ROLE_API_KEY')")
     public ResponseEntity<EnergyStorage> updateEnergyStorage(@PathVariable Long id,
                                                              @RequestBody @Valid EnergyStorage energyStorage) {
-        // Assuming the service has an update method (you can implement it if needed)
-        energyStorage.setId(id); // Assuming EnergyStorage has a setId method
+        energyStorage.setId(id);
         EnergyStorage updatedEnergyStorage = energyStorageService.saveEnergyStorage(energyStorage);
         return ResponseEntity.ok(updatedEnergyStorage);
     }

@@ -141,7 +141,7 @@ public class CalculatorService {
             return corePrice;
         }
 
-        BigDecimal halfCorePrice = corePrice.divide(BigDecimal.TWO, roundingMode);
+        BigDecimal halfCorePrice = corePrice.divide(BigDecimal.valueOf(2), roundingMode);
         BigDecimal grantToApply = grantValue.compareTo(halfCorePrice) <= 0 ? grantValue : halfCorePrice;
 
         return corePrice.subtract(grantToApply);
