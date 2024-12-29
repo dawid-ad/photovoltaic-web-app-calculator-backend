@@ -20,7 +20,9 @@ public class SecurityConfig {
     private String apiKey;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(httpSecurityCorsConfigurer -> {})
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
                 )
