@@ -7,7 +7,7 @@ import pl.dawad.backend.model.dto.ContactFormRequestDto;
 public class CustomerEmailBuilder implements EmailBuilder {
     @Override
     public String getSubject(ContactFormRequestDto data) {
-        return "Dziękujemy za Twoje zapytanie o instalację fotowoltaiczną";
+        return "Twoje zapytanie o instalację fotowoltaiczną";
     }
 
     @Override
