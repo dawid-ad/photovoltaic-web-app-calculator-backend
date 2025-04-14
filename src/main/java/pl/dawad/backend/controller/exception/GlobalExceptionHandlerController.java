@@ -1,5 +1,6 @@
 package pl.dawad.backend.controller.exception;
 
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
@@ -29,6 +30,10 @@ public class GlobalExceptionHandlerController {
 
     @ExceptionHandler(MailSendException.class)
     public ResponseEntity<String> handleException(MailSendException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<String> handleException(MessagingException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
     @ExceptionHandler(ExcelImportException.class)

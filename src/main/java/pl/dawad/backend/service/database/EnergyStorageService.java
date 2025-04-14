@@ -1,7 +1,6 @@
 package pl.dawad.backend.service.database;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import pl.dawad.backend.exception.ResourceNotFoundException;
 import pl.dawad.backend.model.dto.EnergyStorageModelDto;

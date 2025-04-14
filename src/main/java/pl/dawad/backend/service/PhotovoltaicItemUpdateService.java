@@ -64,24 +64,45 @@ public class PhotovoltaicItemUpdateService {
     }
 
     private PhotovoltaicItem buildPhotovoltaicItemFromRow(Row row, PhotovoltaicItemImportParams importParams) {
-        PhotovoltaicItem item = new PhotovoltaicItem();
-        item.setInverterModel(getStringValueFromCell(row.getCell(importParams.getInverterIndex())));
-        item.setModuleModel(getStringValueFromCell(row.getCell(importParams.getModuleModelIndex())));
-        item.setModulePower(getIntValueFromCell(row.getCell(importParams.getModulePowerIndex())));
-        item.setPanelsQuantity(getNumericValueFromCell(row.getCell(importParams.getPanelsQuantityIndex())).orElse(0.0).intValue());
-        item.setInverterPower(getBigDecimalValueFromCell(row.getCell(importParams.getInverterPowerIndex())));
-        item.setPvPower(getBigDecimalValueFromCell(row.getCell(importParams.getPvPowerIndex())));
-        item.setCorePriceCeramicTileSlantRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceCeramicTileSlantRoofIndex())));
-        item.setCorePriceSteelTileSlantRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceSteelTileSlantRoofIndex())));
-        item.setCorePriceSteelSlantRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceSteelSlantRoofIndex())));
-        item.setCorePriceBallastFlatRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceBallastFlatRoofIndex())));
-        item.setCorePriceInvasiveFlatRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceInvasiveFlatRoofIndex())));
-        item.setCorePriceGround(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceGroundIndex())));
-        item.setCorePriceProjoy(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceProjoyIndex())));
-        item.setCorePriceFireButton(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceFireButtonIndex())));
-        item.setCorePriceHybridInverter(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceHybridInverterIndex())));
-        item.setEnergyStorageAvailable(isValueNumeric(row.getCell(importParams.getCorePriceHybridInverterIndex())));
-        return item;
+        PhotovoltaicItem pvItem = new PhotovoltaicItem();
+        pvItem.setInverterModel(getStringValueFromCell(row.getCell(importParams.getInverterIndex())));
+        pvItem.setModuleModel(getStringValueFromCell(row.getCell(importParams.getModuleModelIndex())));
+        pvItem.setModulePower(getIntValueFromCell(row.getCell(importParams.getModulePowerIndex())));
+        pvItem.setPanelsQuantity(getNumericValueFromCell(row.getCell(importParams.getPanelsQuantityIndex())).orElse(0.0).intValue());
+        pvItem.setInverterPower(getBigDecimalValueFromCell(row.getCell(importParams.getInverterPowerIndex())));
+        pvItem.setPvPower(getBigDecimalValueFromCell(row.getCell(importParams.getPvPowerIndex())));
+        pvItem.setCorePriceCeramicTileSlantRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceCeramicTileSlantRoofIndex())));
+        pvItem.setCorePriceSteelTileSlantRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceSteelTileSlantRoofIndex())));
+        pvItem.setCorePriceSteelSlantRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceSteelSlantRoofIndex())));
+        pvItem.setCorePriceBallastFlatRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceBallastFlatRoofIndex())));
+        pvItem.setCorePriceInvasiveFlatRoof(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceInvasiveFlatRoofIndex())));
+        pvItem.setCorePriceGround(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceGroundIndex())));
+        pvItem.setCorePriceProjoy(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceProjoyIndex())));
+        pvItem.setCorePriceFireButton(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceFireButtonIndex())));
+        pvItem.setCorePriceHybridInverter(getBigDecimalValueFromCell(row.getCell(importParams.getCorePriceHybridInverterIndex())));
+        pvItem.setEnergyStorageAvailable(isValueNumeric(row.getCell(importParams.getCorePriceHybridInverterIndex())));
+        pvItem = makeSureProjoyIsProperlySet(BigDecimal.valueOf(6.5),pvItem);
+        return pvItem;
+    }
+    /**
+     In Poland, a fire circuit breaker (DC PROYOJ) is mandatory for photovoltaic installations above 6.5 kWp.
+     This requirement was introduced by an amendment to the Construction Law of February 13, 2020, which came
+     into force on September 19, 2020. The code ensures that the projoy is included in the basic price.
+     */
+    private PhotovoltaicItem makeSureProjoyIsProperlySet(BigDecimal minPvPowerWithoutProjoy, PhotovoltaicItem pvItem){
+        BigDecimal pvPower = pvItem.getPvPower();
+        BigDecimal projoyCorePrice = pvItem.getCorePriceProjoy();
+        if (pvPower.compareTo(minPvPowerWithoutProjoy) >= 0
+                && projoyCorePrice.compareTo(minPvPowerWithoutProjoy) > 0) {
+            pvItem.setCorePriceCeramicTileSlantRoof(pvItem.getCorePriceCeramicTileSlantRoof().add(projoyCorePrice));
+            pvItem.setCorePriceSteelTileSlantRoof(pvItem.getCorePriceCeramicTileSlantRoof().add(projoyCorePrice));
+            pvItem.setCorePriceSteelSlantRoof(pvItem.getCorePriceSteelTileSlantRoof().add(projoyCorePrice));
+            pvItem.setCorePriceBallastFlatRoof(pvItem.getCorePriceBallastFlatRoof().add(projoyCorePrice));
+            pvItem.setCorePriceInvasiveFlatRoof(pvItem.getCorePriceInvasiveFlatRoof().add(projoyCorePrice));
+            pvItem.setCorePriceGround(pvItem.getCorePriceGround().add(projoyCorePrice));
+            pvItem.setCorePriceProjoy(BigDecimal.ZERO);
+        }
+        return pvItem;
     }
     private Optional<Double> getNumericValueFromCell(Cell cell) {
         if (cell != null && (cell.getCellType() == CellType.NUMERIC || cell.getCellType() == CellType.FORMULA)) {

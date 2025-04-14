@@ -10,7 +10,7 @@
     </parent>
     <groupId>pl.dawad</groupId>
     <artifactId>photovoltaic-web-app-calculator-backend</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <name>photovoltaic-web-app-calculator-backend</name>
     <description>photovoltaic-web-app-calculator-backend</description>
     <url/>

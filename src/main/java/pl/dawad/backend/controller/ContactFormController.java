@@ -9,24 +9,22 @@ import pl.dawad.backend.model.dto.ContactFormRequestDto;
 import pl.dawad.backend.model.entity.ContactForm;
 import pl.dawad.backend.model.ContactFormResponse;
 import pl.dawad.backend.service.database.ContactFormService;
-import pl.dawad.backend.service.EmailService;
+import pl.dawad.backend.email.EmailService;
 
 @RestController
 @RequestMapping("/api/contact-form")
 @Validated
 public class ContactFormController {
     private final ContactFormService contactFormService;
-    private final EmailService emailService;
 
-    public ContactFormController(ContactFormService contactFormService, EmailService emailService) {
+    public ContactFormController(ContactFormService contactFormService) {
         this.contactFormService = contactFormService;
-        this.emailService = emailService;
     }
 
     @PostMapping("/submit")
     public ResponseEntity<ContactFormResponse> submitContactForm(@Valid @RequestBody ContactFormRequestDto contactFormRequestDto) {
         ContactForm processedForm = contactFormService.saveContactForm(contactFormRequestDto);
-        boolean emailSent = emailService.sendEmail(contactFormRequestDto);
+        boolean emailSent = contactFormService.sendEmailWithNewContactForm(contactFormRequestDto);
         String emailStatusMessage = emailSent ? "sent successfully" : "failed!";
         return ResponseEntity.ok(new ContactFormResponse(processedForm, emailSent, "Form status: submitted successfully. Email status: " + emailStatusMessage));
     }

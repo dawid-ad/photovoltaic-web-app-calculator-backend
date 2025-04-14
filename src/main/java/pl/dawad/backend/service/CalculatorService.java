@@ -66,12 +66,13 @@ public class CalculatorService {
         calculationResult.setPrice(resultPrice);
         calculationResult.setPriceWithoutGrant(resultPriceWithoutGrant);
         calculationResult.setModuleModel(pvItem.getModuleModel());
+        calculationResult.setModuleModel(pvItem.getModuleModel());
         calculationResult.setModulePower(pvItem.getModulePower());
         calculationResult.setPanelsQuantity(pvItem.getPanelsQuantity());
         calculationResult.setVatTax(vatTax);
         calculationResult.setPricePerKw(resultPrice.divide(pvItem.getPvPower(), calculationScale, roundingMode));
         calculationResult.setEnergyPricePerKwh(settings.getMarketEnergyPricePerKwh());
-        calculationResult.setProjoyIncluded((pvItem.getCorePriceProjoy().compareTo(BigDecimal.ZERO)) <= 0);
+        calculationResult.setProjoyIncluded((pvItem.getCorePriceProjoy().compareTo(BigDecimal.ZERO)) <= 0 || formData.isProjoy());
         calculationResult.setGrantPossible(isGrantPossible(pvItem,settings,formData));
         calculationResult.setEnergyStorageAvailable(pvItem.isEnergyStorageAvailable());
         return calculationResult;
