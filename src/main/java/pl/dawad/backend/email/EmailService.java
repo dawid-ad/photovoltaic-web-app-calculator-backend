@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -46,8 +47,8 @@ public class EmailService {
             helper.setText(htmlContent, true);
             helper.setFrom(new InternetAddress(sender, senderPreviewName));
 
-            FileSystemResource footerImg = new FileSystemResource(new File("src/main/resources/img/email_footer.png"));
-            helper.addInline("footerImage", footerImg);
+            ClassPathResource imageResource = new ClassPathResource("img/email_footer.png");
+            helper.addInline("footerImage", imageResource);
             javaMailSender.send(message);
             return true;
         } catch (MessagingException | UnsupportedEncodingException e) {

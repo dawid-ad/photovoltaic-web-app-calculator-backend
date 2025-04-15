@@ -52,7 +52,8 @@ public class InternalEmailBuilder implements EmailBuilder {
         message.append("Przycisk przeciwpożarowy: ").append(calculationFormData.isFireButton() ? "TAK" : "NIE").append("\n");
         message.append("Optymalizatory mocy: ").append(
                 calculationFormData.getPowerOptimizersType() != null ? calculationFormData.getPowerOptimizersType() : "Brak").append("\n");
-        message.append("Magazyn energii: ").append(calculationFormData.getEnergyStorageModelId() != null ? "TAK" : "NIE").append("\n");
+        message.append("Wybrany magazyn energii: ").append(calculationFormData.getEnergyStorageModelId() > 0 ? "TAK" : "NIE").append("\n");
+        message.append("Wybrany model magazynu energii: ").append(calculationFormData.getEnergyStorageModelId()).append("\n");
         message.append("Dotacja: ").append(calculationFormData.isHasGrant() ? "TAK" : "NIE").append("\n\n");
 
         message.append("🔧 Wynik kalkulacji:\n");

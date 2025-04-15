@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class CalculatorService {
@@ -170,10 +172,21 @@ public class CalculatorService {
                     case STEEL_SLANT -> photovoltaicItem.getCorePriceSteelSlantRoof();
                     case CERAMIC_TILE_SLANT -> photovoltaicItem.getCorePriceCeramicTileSlantRoof();
                     case STEEL_TILE_SLANT -> photovoltaicItem.getCorePriceSteelTileSlantRoof();
-                    default -> null;
+                    default -> getTheMostExpensiveOne(photovoltaicItem);
                 };
             };
         };
+    }
+
+    private BigDecimal getTheMostExpensiveOne(PhotovoltaicItem photovoltaicItem){
+        return Stream.of(
+                        photovoltaicItem.getCorePriceSteelSlantRoof(),
+                        photovoltaicItem.getCorePriceCeramicTileSlantRoof(),
+                        photovoltaicItem.getCorePriceSteelTileSlantRoof()
+                )
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder())
+                .orElse(BigDecimal.ZERO);
     }
 
     private MountTypeForView determineMountType(InstallationType installationType, RoofType roofType) {
