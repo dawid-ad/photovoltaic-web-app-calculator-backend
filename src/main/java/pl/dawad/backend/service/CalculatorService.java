@@ -92,6 +92,10 @@ public class CalculatorService {
                                                            boolean includeGrant) {
         PowerOptimizersType powerOptimizersType = formData.getPowerOptimizersType();
 
+        if (!formData.getRegion().equalsIgnoreCase("wielkopolskie")){
+            corePrice = corePrice.add(BigDecimal.valueOf(1500));
+        }
+
         if (formData.isProjoy()) {
             corePrice = corePrice.add(pvItem.getCorePriceProjoy());
         }
@@ -122,10 +126,6 @@ public class CalculatorService {
                     && isGrantPossible(pvItem,settings,formData)) {
                 corePrice = applyGrantToPrice(settings, corePrice);
             }
-        }
-
-        if (!formData.getRegion().equalsIgnoreCase("wielkopolskie")){
-            corePrice = corePrice.add(BigDecimal.valueOf(1500));
         }
 
         return corePrice;
