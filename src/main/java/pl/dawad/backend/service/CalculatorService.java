@@ -124,6 +124,10 @@ public class CalculatorService {
             }
         }
 
+        if (!formData.getRegion().equalsIgnoreCase("wielkopolskie")){
+            corePrice = corePrice.add(BigDecimal.valueOf(1500));
+        }
+
         return corePrice;
     }
 
