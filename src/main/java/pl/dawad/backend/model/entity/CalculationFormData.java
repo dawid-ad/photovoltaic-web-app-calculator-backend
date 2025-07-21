@@ -1,9 +1,6 @@
 package pl.dawad.backend.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -57,6 +54,13 @@ public class CalculationFormData {
     public boolean isRoofSurfaceValid() {
         return roofType != RoofType.SLANT_ROOF || (roofSurface != null && !roofSurface.toString().isBlank());
     }
+
+    @Transient
+    private String utmTerm;
+
+    @Transient
+    private String userId;
+
 
     @Override
     public String toString() {
